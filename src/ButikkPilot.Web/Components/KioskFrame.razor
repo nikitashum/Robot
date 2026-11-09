@@ -1,0 +1,15 @@
+<div class="kiosk-stage">
+    <div class="kiosk-device">
+        <div class="kiosk-status">@StatusText</div>
+        <div class="kiosk-screen">
+            @ChildContent
+        </div>
+        <div class="kiosk-caption">@Caption</div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string StatusText { get; set; } = "ButikkPilot";
+    [Parameter] public string Caption { get; set; } = "";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

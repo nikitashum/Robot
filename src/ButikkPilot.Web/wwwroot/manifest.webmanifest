@@ -1,0 +1,12 @@
+{
+  "name": "ButikkPilot AI",
+  "short_name": "ButikkPilot",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1419",
+  "theme_color": "#0f1419",
+  "description": "AI shopping assistant for electronics stores (demo)",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}

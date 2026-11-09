@@ -1,0 +1,119 @@
+{
+  "storeName": "ElektroNova Demo Oslo",
+  "departments": [
+    {
+      "id": "DEPT-PC",
+      "name": { "nb-NO": "PC og laptop", "en-US": "Computers & laptops", "pl-PL": "Komputery i laptopy" },
+      "aisles": [
+        {
+          "id": "AISLE-1",
+          "label": { "nb-NO": "Gang 1 – Ultrabooks", "en-US": "Aisle 1 – Ultrabooks", "pl-PL": "Alejka 1 – Ultrabooki" },
+          "directions": {
+            "nb-NO": "Fra inngangen: rett frem, ta til høyre etter kafeen, gang 1 på venstre side.",
+            "en-US": "From the entrance: straight ahead, turn right after the café, aisle 1 is on your left.",
+            "pl-PL": "Od wejścia: prosto, skręć w prawo za kawiarnią, alejka 1 jest po lewej stronie."
+          },
+          "mapX": 120,
+          "mapY": 80,
+          "shelves": [ { "id": "SHELF-A1" }, { "id": "SHELF-A2" } ]
+        },
+        {
+          "id": "AISLE-2",
+          "label": { "nb-NO": "Gang 2 – Arbeidsstasjoner", "en-US": "Aisle 2 – Workstations", "pl-PL": "Alejka 2 – Stacje robocze" },
+          "directions": {
+            "nb-NO": "Fra inngangen: rett frem, PC-avdelingen, gang 2 midt i hallen.",
+            "en-US": "From the entrance: straight ahead to the computer department, aisle 2 is in the middle of the hall.",
+            "pl-PL": "Od wejścia: prosto do działu komputerów, alejka 2 jest na środku hali."
+          },
+          "mapX": 200,
+          "mapY": 120,
+          "shelves": [ { "id": "SHELF-B1" }, { "id": "SHELF-B2" } ]
+        },
+        {
+          "id": "AISLE-3",
+          "label": { "nb-NO": "Gang 3 – Gaming", "en-US": "Aisle 3 – Gaming", "pl-PL": "Alejka 3 – Gaming" },
+          "directions": {
+            "nb-NO": "Fra inngangen: rett frem til PC-avdelingen, gaming-hyllene er i gang 3 (grønt skilt).",
+            "en-US": "From the entrance: straight ahead to the computer department, the gaming shelves are in aisle 3 (green sign).",
+            "pl-PL": "Od wejścia: prosto do działu komputerów, półki gamingowe są w alejce 3 (zielona tablica)."
+          },
+          "mapX": 280,
+          "mapY": 160,
+          "shelves": [ { "id": "SHELF-H1" }, { "id": "SHELF-C1" }, { "id": "SHELF-C2" } ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-MON",
+      "name": { "nb-NO": "Skjermer", "en-US": "Monitors", "pl-PL": "Monitory" },
+      "aisles": [
+        {
+          "id": "AISLE-1",
+          "label": { "nb-NO": "Gang 1 – Gaming-skjermer", "en-US": "Aisle 1 – Gaming monitors", "pl-PL": "Alejka 1 – Monitory gamingowe" },
+          "directions": {
+            "nb-NO": "Skjermavdelingen ligger rett bak PC-avdelingen.",
+            "en-US": "The monitor department is right behind the computer department.",
+            "pl-PL": "Dział monitorów znajduje się tuż za działem komputerów."
+          },
+          "mapX": 340,
+          "mapY": 100,
+          "shelves": [ { "id": "SHELF-D1" } ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-ACC",
+      "name": { "nb-NO": "Tilbehør", "en-US": "Accessories", "pl-PL": "Akcesoria" },
+      "aisles": [
+        {
+          "id": "AISLE-1",
+          "label": { "nb-NO": "Gang 1 – Mus og tastatur", "en-US": "Aisle 1 – Mice & keyboards", "pl-PL": "Alejka 1 – Myszy i klawiatury" },
+          "directions": {
+            "nb-NO": "Tilbehør ved kassen, til venstre for inngangen.",
+            "en-US": "Accessories are by the checkout, to the left of the entrance.",
+            "pl-PL": "Akcesoria są przy kasach, po lewej stronie od wejścia."
+          },
+          "mapX": 60,
+          "mapY": 140,
+          "shelves": [ { "id": "SHELF-E1" }, { "id": "SHELF-E2" } ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-AUD",
+      "name": { "nb-NO": "Lyd og hodetelefoner", "en-US": "Audio & headphones", "pl-PL": "Audio i słuchawki" },
+      "aisles": [
+        {
+          "id": "AISLE-1",
+          "label": { "nb-NO": "Gang 1 – Hodetelefoner", "en-US": "Aisle 1 – Headphones", "pl-PL": "Alejka 1 – Słuchawki" },
+          "directions": {
+            "nb-NO": "Lydavdelingen er bak tilbehørshyllene.",
+            "en-US": "The audio department is behind the accessory shelves.",
+            "pl-PL": "Dział audio znajduje się za półkami z akcesoriami."
+          },
+          "mapX": 100,
+          "mapY": 200,
+          "shelves": [ { "id": "SHELF-F1" } ]
+        }
+      ]
+    },
+    {
+      "id": "DEPT-MOB",
+      "name": { "nb-NO": "Mobil og nettbrett", "en-US": "Phones & tablets", "pl-PL": "Telefony i tablety" },
+      "aisles": [
+        {
+          "id": "AISLE-1",
+          "label": { "nb-NO": "Gang 1 – Smarttelefoner", "en-US": "Aisle 1 – Smartphones", "pl-PL": "Alejka 1 – Smartfony" },
+          "directions": {
+            "nb-NO": "Mobilavdelingen ved hovedinngangen til høyre.",
+            "en-US": "The phone department is by the main entrance, on the right.",
+            "pl-PL": "Dział telefonów jest przy głównym wejściu, po prawej stronie."
+          },
+          "mapX": 40,
+          "mapY": 60,
+          "shelves": [ { "id": "SHELF-G1" } ]
+        }
+      ]
+    }
+  ]
+}

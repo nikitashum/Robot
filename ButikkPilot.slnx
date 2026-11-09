@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ButikkPilot.Api/ButikkPilot.Api.csproj" />
+    <Project Path="src/ButikkPilot.Contracts/ButikkPilot.Contracts.csproj" />
+    <Project Path="src/ButikkPilot.Core/ButikkPilot.Core.csproj" />
+    <Project Path="src/ButikkPilot.Infrastructure/ButikkPilot.Infrastructure.csproj" />
+    <Project Path="src/ButikkPilot.RobotAdapter/ButikkPilot.RobotAdapter.csproj" />
+    <Project Path="src/ButikkPilot.Web/ButikkPilot.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ButikkPilot.Tests/ButikkPilot.Tests.csproj" />
+  </Folder>
+</Solution>

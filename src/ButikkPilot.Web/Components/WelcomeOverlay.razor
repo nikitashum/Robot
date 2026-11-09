@@ -1,0 +1,39 @@
+@using ButikkPilot.Web.Services
+
+<div class="welcome-overlay" @onkeydown="OnKeyDown">
+    <div class="welcome-card" role="dialog" aria-modal="true" aria-labelledby="welcome-title" aria-describedby="welcome-lead">
+        <p class="welcome-kicker">@Ui.StatusStrip</p>
+        <h2 id="welcome-title">@Ui.WelcomeTitle</h2>
+        <p id="welcome-lead" class="welcome-lead">@Ui.WelcomeLead</p>
+        <ul class="welcome-bullets">
+            <li>@Ui.Bullet1</li>
+            <li>@Ui.Bullet2</li>
+            <li>@Ui.Bullet3</li>
+        </ul>
+        <div class="welcome-actions">
+            <button type="button" class="btn primary lg" @ref="_primary" @onclick="OnStartGuided">@Ui.StartGuided</button>
+            <button type="button" class="btn ghost lg" @onclick="OnExplore">@Ui.ExploreSelf</button>
+        </div>
+        <p class="welcome-foot">@Ui.DemoDisclaimer</p>
+    </div>
+</div>
+
+@code {
+    private ElementReference _primary;
+
+    [Parameter, EditorRequired] public UiText Ui { get; set; } = default!;
+    [Parameter] public EventCallback OnStartGuided { get; set; }
+    [Parameter] public EventCallback OnExplore { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Keyboard / screen-reader users land inside the dialog (the page behind it is inert).
+            await _primary.FocusAsync();
+        }
+    }
+
+    private Task OnKeyDown(KeyboardEventArgs e) =>
+        e.Key == "Escape" && OnExplore.HasDelegate ? OnExplore.InvokeAsync() : Task.CompletedTask;
+}

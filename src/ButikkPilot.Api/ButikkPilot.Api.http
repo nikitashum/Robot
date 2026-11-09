@@ -1,0 +1,6 @@
+@ButikkPilot.Api_HostAddress = http://localhost:5107
+
+GET {{ButikkPilot.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

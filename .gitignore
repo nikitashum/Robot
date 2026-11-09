@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+.idea/
+artifacts/
+TestResults/
+*.trx
+src/**/appsettings.Development.json
+!src/**/appsettings.Development.json.example
+# Web dev settings only hold the loopback API URL (no secret) and are removed from every publish.
+!src/ButikkPilot.Web/wwwroot/appsettings.Development.json

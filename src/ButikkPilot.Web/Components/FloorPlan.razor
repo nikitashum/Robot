@@ -1,0 +1,36 @@
+@using ButikkPilot.Contracts
+
+<div class="floor-plan">
+    <svg viewBox="0 0 400 260" role="img" aria-label="@AriaLabel">
+        <rect x="0" y="0" width="400" height="260" class="floor-bg" />
+        <rect x="10" y="30" width="50" height="30" class="entrance" />
+        <text x="35" y="22" text-anchor="middle" class="floor-label">@EntranceLabel</text>
+
+        @if (Guide is not null)
+        {
+            <line x1="@EntranceX" y1="@EntranceY" x2="@Guide.TargetX" y2="@Guide.TargetY" class="route" />
+        }
+
+        @foreach (var point in Map?.Points ?? [])
+        {
+            <AisleMarker Point="point" Active="@(point.Key == HighlightKey)" @key="point.Key" />
+        }
+
+        @if (Guide is not null)
+        {
+            <circle cx="@Guide.TargetX" cy="@Guide.TargetY" r="5" class="robot-dot" />
+        }
+    </svg>
+</div>
+
+@code {
+    // Matches SimulationRobotAdapter's start position.
+    private const int EntranceX = 35;
+    private const int EntranceY = 45;
+
+    [Parameter] public StoreMapDto? Map { get; set; }
+    [Parameter] public string? HighlightKey { get; set; }
+    [Parameter] public GuideResult? Guide { get; set; }
+    [Parameter] public string EntranceLabel { get; set; } = "";
+    [Parameter] public string AriaLabel { get; set; } = "";
+}

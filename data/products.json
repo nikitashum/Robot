@@ -1,0 +1,862 @@
+[
+  {
+    "id": "lap-gf-66",
+    "name": "MSI GF66 Katana 15",
+    "category": "laptop",
+    "brand": "MSI",
+    "priceNok": 9490,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-H1",
+    "specs": {
+      "CPU": "i5-12450H",
+      "GPU": "RTX 4050 6GB",
+      "RAM": "16 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "15.6\" 144Hz",
+      "Battery": "6 h"
+    },
+    "tags": [
+      "gaming",
+      "midrange"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-ideapad-gaming",
+    "name": "Lenovo IdeaPad Gaming 3",
+    "category": "laptop",
+    "brand": "Lenovo",
+    "priceNok": 9990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-C1",
+    "specs": {
+      "CPU": "Ryzen 5 7535HS",
+      "GPU": "RTX 4050 6GB",
+      "RAM": "16 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "15.6\" 120Hz",
+      "Battery": "5 h"
+    },
+    "tags": [
+      "gaming",
+      "midrange"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-asus-tuf-a15",
+    "name": "ASUS TUF A15",
+    "category": "laptop",
+    "brand": "ASUS",
+    "priceNok": 10490,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-C2",
+    "specs": {
+      "CPU": "Ryzen 7 7735HS",
+      "GPU": "RTX 4060 8GB",
+      "RAM": "16 GB",
+      "Storage": "1 TB SSD",
+      "Screen": "15.6\" 144Hz",
+      "Battery": "7 h"
+    },
+    "tags": [
+      "gaming",
+      "midrange"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-hp-victus",
+    "name": "HP Victus 16",
+    "category": "laptop",
+    "brand": "HP",
+    "priceNok": 8990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-H1",
+    "specs": {
+      "CPU": "i5-13420H",
+      "GPU": "RTX 3050 6GB",
+      "RAM": "16 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "16.1\" 144Hz",
+      "Battery": "6 h"
+    },
+    "tags": [
+      "gaming",
+      "budget"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-acer-nitro",
+    "name": "Acer Nitro 5",
+    "category": "laptop",
+    "brand": "Acer",
+    "priceNok": 8490,
+    "inStock": false,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-C1",
+    "specs": {
+      "CPU": "i5-12500H",
+      "GPU": "RTX 3050",
+      "RAM": "8 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "15.6\" 144Hz",
+      "Battery": "5 h"
+    },
+    "tags": [
+      "gaming",
+      "budget"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-legion-slim",
+    "name": "Lenovo Legion Slim 5",
+    "category": "laptop",
+    "brand": "Lenovo",
+    "priceNok": 12990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-C2",
+    "specs": {
+      "CPU": "Ryzen 7 7840HS",
+      "GPU": "RTX 4060",
+      "RAM": "16 GB",
+      "Storage": "1 TB SSD",
+      "Screen": "16\" 165Hz",
+      "Battery": "8 h"
+    },
+    "tags": [
+      "gaming",
+      "premium"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-rog-strix",
+    "name": "ASUS ROG Strix G16",
+    "category": "laptop",
+    "brand": "ASUS",
+    "priceNok": 14990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-3/SHELF-C2",
+    "specs": {
+      "CPU": "i7-13650HX",
+      "GPU": "RTX 4060",
+      "RAM": "16 GB",
+      "Storage": "1 TB SSD",
+      "Screen": "16\" 240Hz",
+      "Battery": "6 h"
+    },
+    "tags": [
+      "gaming",
+      "premium"
+    ],
+    "compareGroup": "gaming-10k"
+  },
+  {
+    "id": "lap-mac-air-m2",
+    "name": "MacBook Air 13 M2",
+    "category": "laptop",
+    "brand": "Apple",
+    "priceNok": 11990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-1/SHELF-A1",
+    "specs": {
+      "CPU": "Apple M2",
+      "GPU": "8-core GPU",
+      "RAM": "8 GB",
+      "Storage": "256 GB SSD",
+      "Screen": "13.6\" Retina",
+      "Battery": "18 h"
+    },
+    "tags": [
+      "student",
+      "lightweight"
+    ],
+    "compareGroup": "ultrabook"
+  },
+  {
+    "id": "lap-dell-xps-13",
+    "name": "Dell XPS 13",
+    "category": "laptop",
+    "brand": "Dell",
+    "priceNok": 13990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-1/SHELF-A2",
+    "specs": {
+      "CPU": "i7-1355U",
+      "GPU": "Iris Xe",
+      "RAM": "16 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "13.4\" OLED",
+      "Battery": "12 h"
+    },
+    "tags": [
+      "student",
+      "lightweight"
+    ],
+    "compareGroup": "ultrabook"
+  },
+  {
+    "id": "lap-hp-pavilion",
+    "name": "HP Pavilion 15",
+    "category": "laptop",
+    "brand": "HP",
+    "priceNok": 6990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-2/SHELF-B1",
+    "specs": {
+      "CPU": "Ryzen 5 7520U",
+      "GPU": "Radeon Graphics",
+      "RAM": "16 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "15.6\" FHD",
+      "Battery": "8 h"
+    },
+    "tags": [
+      "student",
+      "office"
+    ],
+    "compareGroup": "office"
+  },
+  {
+    "id": "lap-surface-laptop",
+    "name": "Microsoft Surface Laptop 5",
+    "category": "laptop",
+    "brand": "Microsoft",
+    "priceNok": 10990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-1/SHELF-A1",
+    "specs": {
+      "CPU": "i5-1235U",
+      "GPU": "Iris Xe",
+      "RAM": "8 GB",
+      "Storage": "256 GB SSD",
+      "Screen": "13.5\" PixelSense",
+      "Battery": "17 h"
+    },
+    "tags": [
+      "student",
+      "office"
+    ],
+    "compareGroup": "ultrabook"
+  },
+  {
+    "id": "lap-lenovo-v15",
+    "name": "Lenovo V15",
+    "category": "laptop",
+    "brand": "Lenovo",
+    "priceNok": 4990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-2/SHELF-B1",
+    "specs": {
+      "CPU": "Ryzen 3 7320U",
+      "GPU": "Radeon Graphics",
+      "RAM": "8 GB",
+      "Storage": "256 GB SSD",
+      "Screen": "15.6\" FHD",
+      "Battery": "7 h"
+    },
+    "tags": [
+      "budget",
+      "office"
+    ],
+    "compareGroup": "office"
+  },
+  {
+    "id": "desk-optiplex",
+    "name": "Dell OptiPlex Desktop",
+    "category": "desktop",
+    "brand": "Dell",
+    "priceNok": 8990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-2/SHELF-B1",
+    "specs": {
+      "CPU": "i5-13400",
+      "GPU": "UHD 730",
+      "RAM": "16 GB",
+      "Storage": "512 GB SSD",
+      "Screen": "—",
+      "Battery": "—"
+    },
+    "tags": [
+      "office"
+    ],
+    "compareGroup": "desktop"
+  },
+  {
+    "id": "desk-hp-elitedesk",
+    "name": "HP EliteDesk",
+    "category": "desktop",
+    "brand": "HP",
+    "priceNok": 10490,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-2/SHELF-B2",
+    "specs": {
+      "CPU": "i7-13700",
+      "GPU": "UHD 770",
+      "RAM": "16 GB",
+      "Storage": "1 TB SSD",
+      "Screen": "—",
+      "Battery": "—"
+    },
+    "tags": [
+      "office"
+    ],
+    "compareGroup": "desktop"
+  },
+  {
+    "id": "mon-samsung-27",
+    "name": "Samsung Odyssey G5 27\"",
+    "category": "monitor",
+    "brand": "Samsung",
+    "priceNok": 3490,
+    "inStock": true,
+    "shelfLocation": "DEPT-MON/AISLE-1/SHELF-D1",
+    "specs": {
+      "Resolution": "2560x1440",
+      "RefreshRate": "165 Hz",
+      "Panel": "VA",
+      "Response": "1 ms"
+    },
+    "tags": [
+      "gaming",
+      "monitor"
+    ],
+    "compareGroup": "mon27"
+  },
+  {
+    "id": "mon-lg-ultra",
+    "name": "LG UltraGear 27\"",
+    "category": "monitor",
+    "brand": "LG",
+    "priceNok": 4290,
+    "inStock": true,
+    "shelfLocation": "DEPT-MON/AISLE-1/SHELF-D1",
+    "specs": {
+      "Resolution": "2560x1440",
+      "RefreshRate": "240 Hz",
+      "Panel": "IPS",
+      "Response": "1 ms"
+    },
+    "tags": [
+      "gaming",
+      "monitor"
+    ],
+    "compareGroup": "mon27"
+  },
+  {
+    "id": "mon-dell-24",
+    "name": "Dell P2422H 24\"",
+    "category": "monitor",
+    "brand": "Dell",
+    "priceNok": 2490,
+    "inStock": true,
+    "shelfLocation": "DEPT-MON/AISLE-1/SHELF-D1",
+    "specs": {
+      "Resolution": "1920x1080",
+      "RefreshRate": "60 Hz",
+      "Panel": "IPS",
+      "Response": "5 ms"
+    },
+    "tags": [
+      "office",
+      "monitor"
+    ],
+    "compareGroup": "mon24"
+  },
+  {
+    "id": "mon-asus-proart",
+    "name": "ASUS ProArt 32\"",
+    "category": "monitor",
+    "brand": "ASUS",
+    "priceNok": 6990,
+    "inStock": true,
+    "shelfLocation": "DEPT-MON/AISLE-1/SHELF-D1",
+    "specs": {
+      "Resolution": "3840x2160",
+      "RefreshRate": "60 Hz",
+      "Panel": "IPS",
+      "Response": "5 ms"
+    },
+    "tags": [
+      "creator",
+      "monitor"
+    ],
+    "compareGroup": "mon32"
+  },
+  {
+    "id": "mon-samsung-49",
+    "name": "Samsung Odyssey G9 49\"",
+    "category": "monitor",
+    "brand": "Samsung",
+    "priceNok": 12990,
+    "inStock": true,
+    "shelfLocation": "DEPT-MON/AISLE-1/SHELF-D1",
+    "specs": {
+      "Resolution": "5120x1440",
+      "RefreshRate": "240 Hz",
+      "Panel": "VA",
+      "Response": "1 ms"
+    },
+    "tags": [
+      "gaming",
+      "premium"
+    ],
+    "compareGroup": "ultrawide"
+  },
+  {
+    "id": "kbd-logitech-mx",
+    "name": "Logitech MX Keys",
+    "category": "keyboard",
+    "brand": "Logitech",
+    "priceNok": 1290,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E1",
+    "specs": {
+      "Layout": "Nordic",
+      "Connectivity": "Bluetooth/USB",
+      "Backlight": "Yes"
+    },
+    "tags": [
+      "office",
+      "accessory"
+    ],
+    "compareGroup": "keyboard"
+  },
+  {
+    "id": "kbd-razer-blackwidow",
+    "name": "Razer BlackWidow V4",
+    "category": "keyboard",
+    "brand": "Razer",
+    "priceNok": 1990,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E1",
+    "specs": {
+      "Layout": "Nordic",
+      "Connectivity": "USB",
+      "Backlight": "RGB"
+    },
+    "tags": [
+      "gaming",
+      "accessory"
+    ],
+    "compareGroup": "keyboard"
+  },
+  {
+    "id": "mouse-logitech-g502",
+    "name": "Logitech G502 X",
+    "category": "mouse",
+    "brand": "Logitech",
+    "priceNok": 899,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Dpi": "25600",
+      "Connectivity": "USB",
+      "Weight": "89 g"
+    },
+    "tags": [
+      "gaming",
+      "accessory"
+    ],
+    "compareGroup": "mouse"
+  },
+  {
+    "id": "mouse-mx-master",
+    "name": "Logitech MX Master 3S",
+    "category": "mouse",
+    "brand": "Logitech",
+    "priceNok": 1090,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Dpi": "8000",
+      "Connectivity": "Bluetooth/USB",
+      "Weight": "141 g"
+    },
+    "tags": [
+      "office",
+      "accessory"
+    ],
+    "compareGroup": "mouse"
+  },
+  {
+    "id": "headset-hyperx",
+    "name": "HyperX Cloud III",
+    "category": "headset",
+    "brand": "HyperX",
+    "priceNok": 1290,
+    "inStock": true,
+    "shelfLocation": "DEPT-AUD/AISLE-1/SHELF-F1",
+    "specs": {
+      "Type": "Over-ear",
+      "Connectivity": "Wired",
+      "Mic": "Detachable"
+    },
+    "tags": [
+      "gaming",
+      "audio"
+    ],
+    "compareGroup": "headset"
+  },
+  {
+    "id": "headset-sony-wh",
+    "name": "Sony WH-1000XM5",
+    "category": "headset",
+    "brand": "Sony",
+    "priceNok": 3990,
+    "inStock": true,
+    "shelfLocation": "DEPT-AUD/AISLE-1/SHELF-F1",
+    "specs": {
+      "Type": "Over-ear",
+      "Connectivity": "Bluetooth",
+      "Mic": "Built-in"
+    },
+    "tags": [
+      "audio",
+      "travel"
+    ],
+    "compareGroup": "headset"
+  },
+  {
+    "id": "headset-apple-airpods",
+    "name": "Apple AirPods Pro 2",
+    "category": "earbuds",
+    "brand": "Apple",
+    "priceNok": 2790,
+    "inStock": true,
+    "shelfLocation": "DEPT-AUD/AISLE-1/SHELF-F1",
+    "specs": {
+      "Type": "In-ear",
+      "Connectivity": "Bluetooth",
+      "Mic": "Built-in"
+    },
+    "tags": [
+      "audio",
+      "mobile"
+    ],
+    "compareGroup": "earbuds"
+  },
+  {
+    "id": "phone-iphone-15",
+    "name": "iPhone 15 128 GB",
+    "category": "smartphone",
+    "brand": "Apple",
+    "priceNok": 9490,
+    "inStock": true,
+    "shelfLocation": "DEPT-MOB/AISLE-1/SHELF-G1",
+    "specs": {
+      "CPU": "A16 Bionic",
+      "Storage": "128 GB",
+      "Screen": "6.1\" OLED",
+      "Battery": "20 h video"
+    },
+    "tags": [
+      "mobile"
+    ],
+    "compareGroup": "phone"
+  },
+  {
+    "id": "phone-galaxy-s24",
+    "name": "Samsung Galaxy S24",
+    "category": "smartphone",
+    "brand": "Samsung",
+    "priceNok": 8990,
+    "inStock": true,
+    "shelfLocation": "DEPT-MOB/AISLE-1/SHELF-G1",
+    "specs": {
+      "CPU": "Snapdragon 8 Gen 3",
+      "Storage": "256 GB",
+      "Screen": "6.2\" AMOLED",
+      "Battery": "4000 mAh"
+    },
+    "tags": [
+      "mobile"
+    ],
+    "compareGroup": "phone"
+  },
+  {
+    "id": "phone-pixel-8",
+    "name": "Google Pixel 8",
+    "category": "smartphone",
+    "brand": "Google",
+    "priceNok": 7490,
+    "inStock": true,
+    "shelfLocation": "DEPT-MOB/AISLE-1/SHELF-G1",
+    "specs": {
+      "CPU": "Tensor G3",
+      "Storage": "128 GB",
+      "Screen": "6.2\" OLED",
+      "Battery": "24 h"
+    },
+    "tags": [
+      "mobile"
+    ],
+    "compareGroup": "phone"
+  },
+  {
+    "id": "tab-ipad-air",
+    "name": "iPad Air 11",
+    "category": "tablet",
+    "brand": "Apple",
+    "priceNok": 7490,
+    "inStock": true,
+    "shelfLocation": "DEPT-MOB/AISLE-1/SHELF-G1",
+    "specs": {
+      "CPU": "M2",
+      "Storage": "128 GB",
+      "Screen": "11\" LCD",
+      "Battery": "10 h"
+    },
+    "tags": [
+      "tablet",
+      "student"
+    ],
+    "compareGroup": "tablet"
+  },
+  {
+    "id": "tab-samsung-s9",
+    "name": "Samsung Galaxy Tab S9",
+    "category": "tablet",
+    "brand": "Samsung",
+    "priceNok": 8990,
+    "inStock": true,
+    "shelfLocation": "DEPT-MOB/AISLE-1/SHELF-G1",
+    "specs": {
+      "CPU": "Snapdragon 8 Gen 2",
+      "Storage": "128 GB",
+      "Screen": "11\" AMOLED",
+      "Battery": "12 h"
+    },
+    "tags": [
+      "tablet"
+    ],
+    "compareGroup": "tablet"
+  },
+  {
+    "id": "gpu-rtx4070",
+    "name": "ASUS RTX 4070 Dual",
+    "category": "gpu",
+    "brand": "ASUS",
+    "priceNok": 6990,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-2/SHELF-B2",
+    "specs": {
+      "VRAM": "12 GB",
+      "Interface": "PCIe 4.0",
+      "TDP": "200 W"
+    },
+    "tags": [
+      "gaming",
+      "component"
+    ],
+    "compareGroup": "gpu"
+  },
+  {
+    "id": "ssd-samsung-990",
+    "name": "Samsung 990 Pro 1TB",
+    "category": "storage",
+    "brand": "Samsung",
+    "priceNok": 1490,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Capacity": "1 TB",
+      "Interface": "NVMe",
+      "Read": "7450 MB/s"
+    },
+    "tags": [
+      "component"
+    ],
+    "compareGroup": "ssd"
+  },
+  {
+    "id": "ram-corsair-32",
+    "name": "Corsair Vengeance 32GB DDR5",
+    "category": "ram",
+    "brand": "Corsair",
+    "priceNok": 1890,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Capacity": "32 GB",
+      "Speed": "5600 MHz",
+      "Type": "DDR5"
+    },
+    "tags": [
+      "component"
+    ],
+    "compareGroup": "ram"
+  },
+  {
+    "id": "cam-logitech-brio",
+    "name": "Logitech Brio 4K",
+    "category": "webcam",
+    "brand": "Logitech",
+    "priceNok": 1990,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E1",
+    "specs": {
+      "Resolution": "4K",
+      "FPS": "60",
+      "Mic": "Stereo"
+    },
+    "tags": [
+      "office",
+      "accessory"
+    ],
+    "compareGroup": "webcam"
+  },
+  {
+    "id": "router-asus-ax",
+    "name": "ASUS RT-AX86U Pro",
+    "category": "network",
+    "brand": "ASUS",
+    "priceNok": 2490,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E1",
+    "specs": {
+      "WiFi": "Wi-Fi 6",
+      "Ports": "2.5G WAN",
+      "Coverage": "Large apartment"
+    },
+    "tags": [
+      "network"
+    ],
+    "compareGroup": "router"
+  },
+  {
+    "id": "speaker-sonos-era",
+    "name": "Sonos Era 100",
+    "category": "speaker",
+    "brand": "Sonos",
+    "priceNok": 2790,
+    "inStock": true,
+    "shelfLocation": "DEPT-AUD/AISLE-1/SHELF-F1",
+    "specs": {
+      "Type": "Smart speaker",
+      "Connectivity": "Wi-Fi/Bluetooth",
+      "Voice": "—"
+    },
+    "tags": [
+      "audio",
+      "smarthome"
+    ],
+    "compareGroup": "speaker"
+  },
+  {
+    "id": "tv-samsung-55",
+    "name": "Samsung QLED 55\"",
+    "category": "tv",
+    "brand": "Samsung",
+    "priceNok": 8990,
+    "inStock": true,
+    "shelfLocation": "DEPT-MON/AISLE-1/SHELF-D1",
+    "specs": {
+      "Resolution": "4K",
+      "RefreshRate": "120 Hz",
+      "Panel": "QLED",
+      "HDR": "HDR10+"
+    },
+    "tags": [
+      "tv",
+      "premium"
+    ],
+    "compareGroup": "tv55"
+  },
+  {
+    "id": "ns-switch-oled",
+    "name": "Nintendo Switch OLED",
+    "category": "console",
+    "brand": "Nintendo",
+    "priceNok": 3490,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Storage": "64 GB",
+      "Screen": "7\" OLED",
+      "Battery": "4.5-9 h"
+    },
+    "tags": [
+      "gaming",
+      "console"
+    ],
+    "compareGroup": "console"
+  },
+  {
+    "id": "ps5-slim",
+    "name": "PlayStation 5 Slim",
+    "category": "console",
+    "brand": "Sony",
+    "priceNok": 5490,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Storage": "1 TB SSD",
+      "GPU": "RDNA 2",
+      "Optical": "Disc"
+    },
+    "tags": [
+      "gaming",
+      "console"
+    ],
+    "compareGroup": "console"
+  },
+  {
+    "id": "xbox-series-s",
+    "name": "Xbox Series S",
+    "category": "console",
+    "brand": "Microsoft",
+    "priceNok": 3490,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E2",
+    "specs": {
+      "Storage": "512 GB SSD",
+      "GPU": "RDNA 2",
+      "Optical": "No"
+    },
+    "tags": [
+      "gaming",
+      "console"
+    ],
+    "compareGroup": "console"
+  },
+  {
+    "id": "printer-epson",
+    "name": "Epson EcoTank ET-2850",
+    "category": "printer",
+    "brand": "Epson",
+    "priceNok": 3990,
+    "inStock": true,
+    "shelfLocation": "DEPT-ACC/AISLE-1/SHELF-E1",
+    "specs": {
+      "Type": "Inkjet",
+      "Functions": "Print/Scan",
+      "Connectivity": "Wi-Fi"
+    },
+    "tags": [
+      "office"
+    ],
+    "compareGroup": "printer"
+  },
+  {
+    "id": "nas-synology",
+    "name": "Synology DS223j",
+    "category": "nas",
+    "brand": "Synology",
+    "priceNok": 3490,
+    "inStock": true,
+    "shelfLocation": "DEPT-PC/AISLE-2/SHELF-B2",
+    "specs": {
+      "Bays": "2",
+      "RAM": "1 GB",
+      "Connectivity": "Gigabit"
+    },
+    "tags": [
+      "office",
+      "storage"
+    ],
+    "compareGroup": "nas"
+  }
+]

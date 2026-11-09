@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Server-side domain + orchestration. Never referenced by the browser client. -->
+  <PropertyGroup>
+    <RootNamespace>ButikkPilot.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Versions of Microsoft.Extensions.* come from the shared framework, so they can never drift from the runtime. -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\ButikkPilot.Contracts\ButikkPilot.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ButikkPilot.Tests" />
+  </ItemGroup>
+
+</Project>

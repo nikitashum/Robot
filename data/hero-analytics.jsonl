@@ -1,0 +1,15 @@
+{"timestamp":"2026-11-09T12:30:57.8489417+00:00","eventName":"session_started","payload":{"sessionId":"e39059fb-d5ee-4ce4-a7aa-69109dd5cdda"}}
+{"timestamp":"2026-11-09T12:30:57.8990397+00:00","eventName":"products_recommended","payload":{"count":3,"ids":["lap-hp-victus","lap-gf-66","lap-ideapad-gaming"]}}
+{"timestamp":"2026-11-09T12:30:57.907298+00:00","eventName":"products_compared","payload":{"ids":["lap-gf-66","lap-ideapad-gaming","lap-asus-tuf-a15"]}}
+{"timestamp":"2026-11-09T12:32:36.8212222+00:00","eventName":"session_started","payload":{"sessionId":"72192725-2214-4c56-b91a-4d7ae6f3a900"}}
+{"timestamp":"2026-11-09T12:32:36.8672497+00:00","eventName":"products_recommended","payload":{"count":3,"ids":["lap-hp-victus","lap-gf-66","lap-ideapad-gaming"]}}
+{"timestamp":"2026-11-09T12:32:36.8749347+00:00","eventName":"products_compared","payload":{"ids":["lap-gf-66","lap-ideapad-gaming","lap-asus-tuf-a15"]}}
+{"timestamp":"2026-11-09T12:33:08.1384517+00:00","eventName":"session_started","payload":{"sessionId":"5f979176-3718-4387-a8d5-79ae947dbd0a"}}
+{"timestamp":"2026-11-09T12:33:08.1828451+00:00","eventName":"products_recommended","payload":{"count":3,"ids":["lap-hp-victus","lap-gf-66","lap-ideapad-gaming"]}}
+{"timestamp":"2026-11-09T12:33:08.1946047+00:00","eventName":"products_compared","payload":{"ids":["lap-gf-66","lap-ideapad-gaming","lap-asus-tuf-a15"]}}
+{"timestamp":"2026-11-09T17:09:26.1705437+00:00","eventName":"session_started","payload":{"sessionId":"4059a9fb-8263-4a5c-864d-aaf0fb7c0f26","language":"nb-NO"}}
+{"timestamp":"2026-11-09T17:09:26.2305034+00:00","eventName":"products_recommended","payload":{"count":3,"ids":["lap-hp-victus","lap-gf-66","lap-ideapad-gaming"]}}
+{"timestamp":"2026-11-09T17:09:26.2385878+00:00","eventName":"products_compared","payload":{"ids":["lap-gf-66","lap-ideapad-gaming","lap-asus-tuf-a15"]}}
+{"timestamp":"2026-11-09T17:10:02.2971232+00:00","eventName":"session_started","payload":{"sessionId":"63efa816-5314-4634-b6f8-ac098fcffe57","language":"nb-NO"}}
+{"timestamp":"2026-11-09T17:10:02.3514091+00:00","eventName":"products_recommended","payload":{"count":3,"ids":["lap-hp-victus","lap-gf-66","lap-ideapad-gaming"]}}
+{"timestamp":"2026-11-09T17:10:02.3635788+00:00","eventName":"products_compared","payload":{"ids":["lap-gf-66","lap-ideapad-gaming","lap-asus-tuf-a15"]}}

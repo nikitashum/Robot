@@ -1,0 +1,31 @@
+@using ButikkPilot.Contracts
+@using ButikkPilot.Web.Services
+
+<button type="button" class="product-card @(Selected ? "selected" : "")" aria-pressed="@(Selected ? "true" : "false")" @onclick="OnSelect">
+    <span class="product-card-header">
+        <strong>@Product.Name</strong>
+        <span class="price">@Ui.FormatPrice(Product.PriceNok)</span>
+    </span>
+    <span class="muted">@Product.Brand · @Ui.Shelf @ShelfCode</span>
+    <span class="stock @(Product.InStock ? "in" : "out")">@(Product.InStock ? Ui.InStock : Ui.OutOfStock)</span>
+    @if (Product.Specs.Count > 0)
+    {
+        <span class="specs">
+            @foreach (var kv in Product.Specs.Take(4))
+            {
+                <span class="spec"><span class="spec-key">@kv.Key</span> @kv.Value</span>
+            }
+        </span>
+    }
+</button>
+
+@code {
+    [Parameter, EditorRequired] public ProductCardDto Product { get; set; } = default!;
+    [Parameter, EditorRequired] public UiText Ui { get; set; } = default!;
+    [Parameter] public bool Selected { get; set; }
+    [Parameter] public EventCallback<ProductCardDto> OnSelected { get; set; }
+
+    private string ShelfCode => Product.ShelfLocation.Split('/').LastOrDefault()?.Replace("SHELF-", "") ?? "";
+
+    private Task OnSelect() => OnSelected.HasDelegate ? OnSelected.InvokeAsync(Product) : Task.CompletedTask;
+}

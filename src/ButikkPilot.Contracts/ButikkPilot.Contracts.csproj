@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Wire contracts shared by the API and the browser client. No dependencies, no server logic, no secrets. -->
+  <PropertyGroup>
+    <RootNamespace>ButikkPilot.Contracts</RootNamespace>
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
+
+</Project>

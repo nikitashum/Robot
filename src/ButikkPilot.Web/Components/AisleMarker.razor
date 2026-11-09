@@ -1,0 +1,23 @@
+@using ButikkPilot.Contracts
+
+@* A marker is its own component so the label is a real top-level SVG text element.
+   (The previous version emitted a tspan outside any text element, which renders nothing.) *@
+<g class="aisle-marker">
+    <circle cx="@Point.X" cy="@Point.Y" r="@(Active ? 14 : 9)" class="@(Active ? "aisle-active" : "aisle")" />
+    <text x="@LabelX" y="@(Point.Y + 26)" text-anchor="@Anchor" class="@(Active ? "aisle-text active" : "aisle-text")">@Point.Label</text>
+</g>
+
+@code {
+    [Parameter, EditorRequired] public MapPointDto Point { get; set; } = default!;
+    [Parameter] public bool Active { get; set; }
+
+    // Keep labels inside the 400-wide plan: left-anchor near the left edge, right-anchor near the right edge.
+    private string Anchor => Point.X < 110 ? "start" : Point.X > 290 ? "end" : "middle";
+
+    private int LabelX => Anchor switch
+    {
+        "start" => Math.Max(Point.X - 8, 4),
+        "end" => Math.Min(Point.X + 8, 396),
+        _ => Point.X,
+    };
+}

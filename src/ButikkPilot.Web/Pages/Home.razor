@@ -1,0 +1,407 @@
+﻿@page "/"
+@using ButikkPilot.Contracts
+@using ButikkPilot.Web.Services
+@using Microsoft.Extensions.Logging
+@inject ButikkPilotApiClient Api
+@inject BrowserInterop Browser
+@inject GuidedDemoRunner Runner
+@inject NavigationManager Nav
+@inject ILogger<Home> Logger
+@implements IAsyncDisposable
+
+<PageTitle>ButikkPilot AI</PageTitle>
+
+<KioskFrame StatusText="@Ui.StatusStrip" Caption="@Ui.Tagline">
+    <div class="bp-shell" inert="@_showWelcome">
+        <header class="bp-header">
+            <h1>ButikkPilot</h1>
+            <div class="header-tools">
+                <label class="visually-hidden" for="lang-select">@Ui.LanguageLabel</label>
+                <select id="lang-select" class="lang-select" disabled="@Runner.IsActive"
+                        @bind="_language" @bind:after="OnLanguageChangedAsync">
+                    @foreach (var lang in SupportedLanguages.All)
+                    {
+                        <option value="@lang.Code">@lang.NativeName</option>
+                    }
+                </select>
+                <label class="toggle">
+                    <input type="checkbox" @bind="_showMap" />
+                    @Ui.ShowMap
+                </label>
+                @if (_synthesisAvailable)
+                {
+                    <label class="toggle">
+                        <input type="checkbox" @bind="_voiceOn" @bind:after="OnVoiceToggledAsync" />
+                        @Ui.VoiceLabel
+                    </label>
+                }
+                <button type="button" class="btn ghost sm" aria-label="@Ui.HelpLabel" title="@Ui.HelpLabel"
+                        @onclick="ShowWelcomeAgainAsync">?</button>
+            </div>
+        </header>
+
+        <DemoStepper Runner="Runner" Ui="Ui" OnReplay="StartGuidedDemoAsync" />
+
+        <div class="bp-grid">
+            <section class="chat-panel">
+                <div class="chat-log" @ref="_chatLog" role="log" aria-live="polite" aria-label="@Ui.ChatLogLabel">
+                    @foreach (var line in _lines)
+                    {
+                        <div class="chat-line @line.Role">@line.Text</div>
+                    }
+                    @if (_busy)
+                    {
+                        <div class="chat-line assistant typing" role="status">@Ui.Thinking</div>
+                    }
+                </div>
+
+                <div class="quick-actions">
+                    <button type="button" class="btn chip" disabled="@Locked" @onclick="() => SendCoreAsync(Ui.AskGaming)">@Ui.SuggestionGaming</button>
+                    <button type="button" class="btn chip" disabled="@Locked" @onclick="() => SendCoreAsync(Ui.AskMonitor)">@Ui.SuggestionMonitor</button>
+                    <button type="button" class="btn chip" disabled="@Locked" @onclick="() => SendCoreAsync(Ui.AskStaff)">@Ui.SuggestionStaff</button>
+                </div>
+
+                <form class="chat-input" @onsubmit="SubmitAsync" @onsubmit:preventDefault>
+                    @if (_speechAvailable)
+                    {
+                        <button type="button" class="btn mic @(_listening ? "listening" : "")" disabled="@Locked"
+                                aria-label="@Ui.MicTitle" title="@Ui.MicTitle" @onclick="ListenAsync">🎤</button>
+                    }
+                    <input @bind="_input" @bind:event="oninput" maxlength="@ChatLimits.MaxMessageLength" autocomplete="off"
+                           aria-label="@Ui.InputPlaceholder" placeholder="@Ui.InputPlaceholder" disabled="@Locked" />
+                    <button type="submit" class="btn primary" disabled="@(Locked || string.IsNullOrWhiteSpace(_input))">@Ui.Send</button>
+                </form>
+            </section>
+
+            <aside class="side-panel @(_pulse ? "pulse-products" : "")">
+                @if (_response?.RecommendedProducts.Count > 0)
+                {
+                    <h2>@Ui.Recommendations</h2>
+                    <div class="product-list">
+                        @foreach (var product in _response.RecommendedProducts)
+                        {
+                            <ProductCard Product="product" Ui="Ui" Selected="@(_selectedId == product.Id)"
+                                         OnSelected="SelectProductAsync" @key="product.Id" />
+                        }
+                    </div>
+                }
+
+                @if (TextPanelsCurrent && _response?.Location is { } loc)
+                {
+                    <div class="location-box">
+                        <h3>@Ui.FindInStore</h3>
+                        <p><strong>@loc.DepartmentName</strong> · @loc.AisleLabel · @loc.ShelfLabel</p>
+                        <p class="muted">@loc.Directions</p>
+                    </div>
+                }
+
+                @if (TextPanelsCurrent && _response?.Guide is { } guide)
+                {
+                    <div class="guide-box">
+                        <h3>@Ui.RobotGuide</h3>
+                        <p class="muted">~@guide.EstimatedSeconds @Ui.SecondsShort</p>
+                        <ol>
+                            @foreach (var step in guide.Steps)
+                            {
+                                <li>@Ui.FormatStep(step)</li>
+                            }
+                        </ol>
+                    </div>
+                }
+
+                @if (_response?.HandoffTicket is { } ticket)
+                {
+                    <div class="handoff-box" role="status">@Ui.HandoffNotice <span class="muted">#@ticket</span></div>
+                }
+
+                @if (_showMap)
+                {
+                    <h3>@Ui.StoreMap</h3>
+                    <FloorPlan Map="_map" HighlightKey="@_response?.Location?.PointKey" Guide="_response?.Guide"
+                               EntranceLabel="@Ui.Entrance" AriaLabel="@Ui.StoreMap" />
+                }
+            </aside>
+        </div>
+    </div>
+
+    @if (_showWelcome)
+    {
+        <WelcomeOverlay Ui="Ui" OnStartGuided="StartGuidedFromWelcomeAsync" OnExplore="DismissWelcomeAsync" />
+    }
+</KioskFrame>
+
+@code {
+    private sealed record ChatLine(string Role, string Text);
+
+    private readonly List<ChatLine> _lines = [];
+    private ElementReference _chatLog;
+    private string _language = SupportedLanguages.Default;
+    private Guid? _sessionId;
+    private string _input = "";
+    private bool _busy;
+    private bool _listening;
+    private bool _speechAvailable;
+    private bool _synthesisAvailable;
+    private bool _voiceOn;
+    private bool _showMap = true;
+    private bool _showWelcome;
+    private bool _pulse;
+    private bool _scrollPending;
+    private ChatResponse? _response;
+    private string _responseLanguage = SupportedLanguages.Default;
+    private StoreMapDto? _map;
+    private string? _selectedId;
+
+    private UiText Ui => UiText.For(_language);
+
+    // Location/guide wording is localized by the server when the answer is produced. After a language switch it would
+    // be shown in the old language next to a translated UI, so hide those text panels until the next answer.
+    // (The map highlight and route are language independent and stay.)
+    private bool TextPanelsCurrent => _responseLanguage == _language;
+
+    private bool Locked => _busy || Runner.IsActive;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Runner.Changed += OnRunnerChanged;
+
+        _language = SupportedLanguages.Normalize(QueryValue("lang") ?? await Browser.GetBrowserLanguageAsync());
+        _speechAvailable = await Browser.IsRecognitionAvailableAsync();
+        _synthesisAvailable = await Browser.IsSynthesisAvailableAsync();
+        await Browser.SetDocumentLanguageAsync(_language);
+        _map = await Api.GetMapAsync(_language);
+
+        _showWelcome = QueryValue("kiosk") == "1" || !await Browser.HasSeenWelcomeAsync();
+        if (!_showWelcome)
+        {
+            AddGreeting();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_scrollPending)
+        {
+            _scrollPending = false;
+            await Browser.ScrollToBottomAsync(_chatLog);
+        }
+    }
+
+    // ---- language / welcome ----------------------------------------------------------------------
+
+    private async Task OnLanguageChangedAsync()
+    {
+        _language = SupportedLanguages.Normalize(_language);
+        await Browser.SetDocumentLanguageAsync(_language);
+        _map = await Api.GetMapAsync(_language) ?? _map;
+        if (_lines.Count == 0)
+        {
+            AddGreeting();
+        }
+    }
+
+    private async Task DismissWelcomeAsync()
+    {
+        _showWelcome = false;
+        await Browser.SetWelcomeSeenAsync(true);
+        if (_lines.Count == 0)
+        {
+            AddGreeting();
+        }
+    }
+
+    private async Task StartGuidedFromWelcomeAsync()
+    {
+        await DismissWelcomeAsync();
+        await StartGuidedDemoAsync();
+    }
+
+    private async Task ShowWelcomeAgainAsync()
+    {
+        Runner.Stop();
+        _showWelcome = true;
+        await Browser.SetWelcomeSeenAsync(false);
+    }
+
+    private async Task OnVoiceToggledAsync()
+    {
+        if (!_voiceOn)
+        {
+            await Browser.StopSpeechAsync();
+        }
+    }
+
+    // ---- guided demo ----------------------------------------------------------------------------
+
+    private async Task StartGuidedDemoAsync()
+    {
+        if (Runner.IsActive)
+        {
+            return;
+        }
+
+        try
+        {
+            await Runner.RunAsync(new DemoHost(this));
+        }
+        catch (Exception ex)
+        {
+            // RunAsync handles its own failures; this is the last line of defence for the page.
+            Logger.LogError(ex, "Guided demo crashed unexpectedly");
+        }
+        finally
+        {
+            _pulse = false;
+            _scrollPending = true;
+            StateHasChanged();
+        }
+    }
+
+    private void OnRunnerChanged() => _ = InvokeAsync(StateHasChanged);
+
+    private sealed class DemoHost(Home page) : IGuidedDemoHost
+    {
+        public UiText Text => page.Ui;
+
+        public int ProductCount => page._response?.RecommendedProducts.Count ?? 0;
+
+        public Task ResetAsync()
+        {
+            page.ResetConversation();
+            page._showMap = true;
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> SendAsync(string message, CancellationToken ct) => page.SendCoreAsync(message, ct);
+
+        public void PulseProducts(bool on)
+        {
+            page._pulse = on;
+            _ = page.InvokeAsync(page.StateHasChanged);
+        }
+    }
+
+    // ---- chat -----------------------------------------------------------------------------------
+
+    private Task SubmitAsync() => SendCoreAsync(_input);
+
+    private Task SelectProductAsync(ProductCardDto product)
+    {
+        _selectedId = product.Id;
+        return SendCoreAsync(string.Format(System.Globalization.CultureInfo.InvariantCulture, Ui.AskWhereProduct, product.Name));
+    }
+
+    private async Task ListenAsync()
+    {
+        if (Locked)
+        {
+            return;
+        }
+
+        _listening = true;
+        StateHasChanged();
+        var heard = await Browser.ListenOnceAsync(_language);
+        _listening = false;
+
+        if (!string.IsNullOrWhiteSpace(heard))
+        {
+            await SendCoreAsync(heard);
+        }
+        else
+        {
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>Sends one customer message. Returns false on a displayed failure; cancellation propagates to the caller.</summary>
+    private async Task<bool> SendCoreAsync(string? message, CancellationToken ct = default)
+    {
+        var text = message?.Trim() ?? "";
+        if (text.Length == 0 || _busy)
+        {
+            return false;
+        }
+
+        if (text.Length > ChatLimits.MaxMessageLength)
+        {
+            text = text[..ChatLimits.MaxMessageLength];
+        }
+
+        _lines.Add(new ChatLine("user", text));
+        _input = "";
+        _busy = true;
+        _scrollPending = true;
+        StateHasChanged();
+
+        try
+        {
+            var response = await Api.SendChatAsync(new ChatRequest { SessionId = _sessionId, Message = text, Language = _language }, ct);
+            _response = response;
+            _responseLanguage = response.Language;
+            _sessionId = response.SessionId;
+            _lines.Add(new ChatLine("assistant", response.AssistantMessage));
+
+            if (_voiceOn)
+            {
+                _ = Browser.SpeakAsync(response.AssistantMessage, _language);
+            }
+
+            return true;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (ApiException ex)
+        {
+            Logger.LogWarning("Chat request failed: {Kind}", ex.Kind);
+            _lines.Add(new ChatLine("error", Ui.ErrorFor(ex.Kind)));
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Unexpected error while chatting");
+            _lines.Add(new ChatLine("error", Ui.ErrorGeneric));
+            return false;
+        }
+        finally
+        {
+            _busy = false;
+            _scrollPending = true;
+            StateHasChanged();
+        }
+    }
+
+    private void ResetConversation()
+    {
+        _sessionId = null;
+        _response = null;
+        _selectedId = null;
+        _lines.Clear();
+        _lines.Add(new ChatLine("assistant", Ui.GreetingChat));
+    }
+
+    private void AddGreeting() => _lines.Add(new ChatLine("assistant", Ui.GreetingChat));
+
+    private string? QueryValue(string name)
+    {
+        var query = new Uri(Nav.Uri).Query.TrimStart('?');
+        foreach (var part in query.Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var pair = part.Split('=', 2);
+            if (pair[0].Equals(name, StringComparison.OrdinalIgnoreCase))
+            {
+                return pair.Length > 1 ? Uri.UnescapeDataString(pair[1]) : "";
+            }
+        }
+
+        return null;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        Runner.Changed -= OnRunnerChanged;
+        Runner.Stop();
+        await Browser.StopSpeechAsync();
+    }
+}

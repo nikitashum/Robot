@@ -1,0 +1,65 @@
+@using ButikkPilot.Web.Services
+
+@if (Runner.State != DemoState.Idle)
+{
+    <nav class="demo-stepper" aria-label="@Ui.StepsLabel">
+        <ol class="steps">
+            @foreach (var step in Steps)
+            {
+                var done = Runner.State == DemoState.Completed || step.Index < Runner.CurrentStep;
+                var active = Runner.IsActive && step.Index == Runner.CurrentStep;
+                <li class="step @(active ? "active" : "") @(done ? "done" : "")"
+                    aria-current="@(active ? "step" : null)" @key="step.Index">
+                    <span class="step-num" aria-hidden="true">@(done ? "✓" : step.Index.ToString())</span>
+                    <span class="step-label">@step.Label</span>
+                </li>
+            }
+        </ol>
+
+        <div class="stepper-controls">
+            @if (Runner.IsActive)
+            {
+                @if (Runner.State == DemoState.Paused)
+                {
+                    <button type="button" class="btn ghost sm" @onclick="Runner.Resume">@Ui.Resume</button>
+                }
+                else
+                {
+                    <button type="button" class="btn ghost sm" @onclick="Runner.Pause">@Ui.Pause</button>
+                }
+                <button type="button" class="btn ghost sm" @onclick="Runner.SkipStep">@Ui.SkipStep</button>
+                <button type="button" class="btn ghost sm" @onclick="Runner.Stop">@Ui.StopDemo</button>
+            }
+            else
+            {
+                <button type="button" class="btn secondary sm" @onclick="OnReplay">@Ui.Replay</button>
+                <button type="button" class="btn ghost sm" @onclick="Runner.Stop" aria-label="@Ui.StopDemo">✕</button>
+            }
+        </div>
+
+        <p class="demo-status" role="status">
+            @if (Runner.State == DemoState.Completed)
+            {
+                @Ui.DemoDone
+            }
+            else if (Runner.State == DemoState.Failed)
+            {
+                @Ui.DemoFailed
+            }
+        </p>
+    </nav>
+}
+
+@code {
+    [Parameter, EditorRequired] public GuidedDemoRunner Runner { get; set; } = default!;
+    [Parameter, EditorRequired] public UiText Ui { get; set; } = default!;
+    [Parameter] public EventCallback OnReplay { get; set; }
+
+    private IEnumerable<(int Index, string Label)> Steps =>
+    [
+        (1, Ui.StepGreet),
+        (2, Ui.StepRecommend),
+        (3, Ui.StepLocate),
+        (4, Ui.StepRobot),
+    ];
+}

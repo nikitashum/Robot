@@ -1,0 +1,7 @@
+{
+  "Llm": {
+    "Provider": "OpenAI",
+    "ApiKey": "YOUR_KEY_HERE",
+    "Model": "gpt-4o-mini"
+  }
+}

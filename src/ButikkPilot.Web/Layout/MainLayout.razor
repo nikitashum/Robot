@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+@using ButikkPilot.Web.Services
+@inject BrowserInterop Browser
+
+<main class="content">
+    <ErrorBoundary @ref="_boundary">
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent Context="exception">
+            @* The boundary catches render/event errors that would otherwise leave a dead page. *@
+            <div class="fatal" role="alert">
+                <h1>@_text.FatalTitle</h1>
+                <p>@_text.FatalBody</p>
+                <button type="button" class="btn primary lg" @onclick="ReloadAsync">@_text.FatalReload</button>
+                <details>
+                    <summary>@_text.FatalDetails</summary>
+                    <pre>@exception.GetType().Name: @exception.Message</pre>
+                </details>
+            </div>
+        </ErrorContent>
+    </ErrorBoundary>
+</main>
+
+@code {
+    private ErrorBoundary? _boundary;
+    private readonly UiText _text = UiText.For(null);
+
+    private Task ReloadAsync() => Browser.ReloadAsync();
+}

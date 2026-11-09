@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The seam for real hardware (e.g. a Pudu adapter). Implements IRobotNavigation from Core. -->
+  <PropertyGroup>
+    <RootNamespace>ButikkPilot.RobotAdapter</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ButikkPilot.Core\ButikkPilot.Core.csproj" />
+  </ItemGroup>
+
+</Project>

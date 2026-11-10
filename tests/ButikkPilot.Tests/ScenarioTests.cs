@@ -17,11 +17,12 @@ public class ScenarioTests
         var chat = Chat(sp);
 
         var t1 = await chat.SayAsync("I need a gaming laptop for around 10,000 NOK.");
-        Assert.Empty(t1.RecommendedProducts);                 // asks a follow-up first, like a real assistant
-        Assert.Contains("?", t1.AssistantMessage, StringComparison.Ordinal);
+        Assert.InRange(t1.RecommendedProducts.Count, 2, 3);   // budget in the chip/message → search immediately
 
         var t2 = await chat.SayAsync("I play Fortnite and FC 25, preferably a 15-inch screen.", t1.SessionId);
         Assert.InRange(t2.RecommendedProducts.Count, 2, 3);
+        Assert.NotEqual(t1.AssistantMessage, t2.AssistantMessage);
+        Assert.Contains("Fortnite", t2.AssistantMessage, StringComparison.OrdinalIgnoreCase);
         Assert.All(t2.RecommendedProducts, p =>
         {
             Assert.True(p.PriceNok <= 10_000, $"{p.Name} costs {p.PriceNok}, over the stated budget");
@@ -30,10 +31,12 @@ public class ScenarioTests
 
         var t3 = await chat.SayAsync("Where can I find the first one?", t1.SessionId);
         Assert.NotNull(t3.Location);
+        Assert.NotEmpty(t3.RecommendedProducts);
         Assert.Equal(t2.RecommendedProducts[0].ShelfLocation[..t3.Location.PointKey.Length], t3.Location.PointKey);
         Assert.Null(t3.Guide);
 
         var t4 = await chat.SayAsync("Can the robot guide me there?", t1.SessionId);
+        Assert.NotEmpty(t4.RecommendedProducts);
         Assert.NotNull(t4.Guide);
         Assert.Equal(
             [GuideStepKind.Start, GuideStepKind.Department, GuideStepKind.Aisle, GuideStepKind.Arrive],
@@ -42,6 +45,46 @@ public class ScenarioTests
 
         var t5 = await chat.SayAsync("I'd like to talk to a staff member.", t1.SessionId);
         Assert.False(string.IsNullOrEmpty(t5.HandoffTicket));
+    }
+
+    [Fact]
+    public async Task Laptop_follow_up_needs_the_same_session_as_the_budget_question()
+    {
+        using var sp = TestServices.Build();
+        var chat = Chat(sp);
+
+        var first = await chat.SayAsync("I need a gaming laptop for around 10,000 NOK.");
+        var broken = await chat.SayAsync("I play Fortnite and FC 25, preferably a 15-inch screen.", session: null);
+        Assert.Empty(broken.RecommendedProducts);
+
+        var ok = await chat.SayAsync("I play Fortnite and FC 25, preferably a 15-inch screen.", first.SessionId);
+        Assert.NotEmpty(ok.RecommendedProducts);
+    }
+
+    [Fact]
+    public async Task Hero_scenario_works_on_a_fresh_session_like_guided_demo_replay()
+    {
+        using var sp = TestServices.Build();
+        var chat = Chat(sp);
+
+        async Task AssertHeroRoundAsync()
+        {
+            var t1 = await chat.SayAsync("I need a gaming laptop for around 10,000 NOK.");
+            var t2 = await chat.SayAsync("I play Fortnite and FC 25, preferably a 15-inch screen.", t1.SessionId);
+            Assert.NotEmpty(t2.RecommendedProducts);
+        }
+
+        await AssertHeroRoundAsync();
+        await AssertHeroRoundAsync();
+    }
+
+    [Fact]
+    public async Task Laptop_without_budget_still_asks_a_short_follow_up_first()
+    {
+        using var sp = TestServices.Build();
+        var reply = await Chat(sp).SayAsync("I need a gaming laptop");
+        Assert.Empty(reply.RecommendedProducts);
+        Assert.Contains("?", reply.AssistantMessage, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -70,6 +113,22 @@ public class ScenarioTests
             Assert.True(p.PriceNok <= 5000);
             Assert.StartsWith("DEPT-MON", p.ShelfLocation, StringComparison.Ordinal);
         });
+    }
+
+    [Fact]
+    public async Task Yes_after_monitor_picks_shows_location_not_the_same_list_again()
+    {
+        using var sp = TestServices.Build();
+        var chat = Chat(sp);
+
+        var picks = await chat.SayAsync("take me to monitors");
+        Assert.NotEmpty(picks.RecommendedProducts);
+        Assert.Contains("where", picks.AssistantMessage, StringComparison.OrdinalIgnoreCase);
+
+        var located = await chat.SayAsync("yes", picks.SessionId);
+        Assert.NotNull(located.Location);
+        Assert.NotEqual(picks.AssistantMessage, located.AssistantMessage);
+        Assert.NotEmpty(located.RecommendedProducts);
     }
 
     [Fact]

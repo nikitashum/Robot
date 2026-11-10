@@ -38,7 +38,15 @@
         </div>
 
         <p class="demo-status" role="status">
-            @if (Runner.State == DemoState.Completed)
+            @if (Runner.State == DemoState.Paused)
+            {
+                @Ui.DemoPaused
+            }
+            else if (Runner.State == DemoState.Running && Runner.AwaitingUserTurn)
+            {
+                @Ui.DemoYourTurn
+            }
+            else if (Runner.State == DemoState.Completed)
             {
                 @Ui.DemoDone
             }

@@ -29,7 +29,26 @@ public class GuidedDemoRunnerTests
         public void PulseProducts(bool on) => Pulses.Add(on);
     }
 
-    private static GuidedDemoRunner Runner() => new() { PaceDelay = TimeSpan.Zero };
+    private static GuidedDemoRunner Runner() => new()
+    {
+        BeforeUserMessageDelay = TimeSpan.Zero,
+        AfterAssistantDelay = TimeSpan.Zero,
+        ProductShowcaseDelay = TimeSpan.Zero,
+    };
+
+    [Fact]
+    public async Task Replay_after_completed_runs_all_four_steps_again()
+    {
+        var host = new FakeHost();
+        var runner = Runner();
+
+        Assert.Equal(DemoState.Completed, await runner.RunAsync(host));
+        host.Sent.Clear();
+
+        Assert.Equal(DemoState.Completed, await runner.RunAsync(host));
+        Assert.True(host.ResetCalled);
+        Assert.Equal([host.Text.AskGaming, host.Text.AnswerUsage, host.Text.AskWhere, host.Text.AskGuide], host.Sent);
+    }
 
     [Fact]
     public async Task Runs_all_four_steps_in_order_and_ends_completed()
@@ -193,7 +212,7 @@ public class GuidedDemoRunnerTests
     public async Task Starting_twice_does_not_start_a_second_run()
     {
         var host = new FakeHost();
-        var runner = new GuidedDemoRunner { PaceDelay = TimeSpan.FromMilliseconds(30) };
+        var runner = new GuidedDemoRunner { BeforeUserMessageDelay = TimeSpan.FromMilliseconds(30) };
 
         var first = runner.RunAsync(host);
         var second = await runner.RunAsync(new FakeHost());

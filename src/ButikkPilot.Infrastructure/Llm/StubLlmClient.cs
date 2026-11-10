@@ -59,6 +59,25 @@ public sealed partial class StubLlmClient : ILLMClient
 
         var productIntent = DetectProductIntent(userTexts, out var mentionedInLast);
 
+        // Answer to "which games / budget" — even a single user turn after the follow-up question (session must match).
+        if (productIntent == ProductIntent.None
+            && UsageRegex().IsMatch(lastUser)
+            && StubLocale.IsLaptopDetailsPrompt(messages.LastOrDefault(m => m.Role == "assistant")?.Content))
+        {
+            productIntent = ProductIntent.Laptop;
+            mentionedInLast = false;
+        }
+
+        var lastAssistant = messages.LastOrDefault(m => m.Role == "assistant")?.Content;
+        if (IsAffirmative(lastUser) && StubLocale.IsProductLocationOffer(lastAssistant))
+        {
+            var target = ResolveTargetProduct(messages, lastUser);
+            if (target is not null)
+            {
+                return Call(ToolNames.GetLocation, new { productId = target });
+            }
+        }
+
         var wantsGuide = GuideRegex().IsMatch(lastUser);
         if (wantsGuide || LocationRegex().IsMatch(lastUser))
         {
@@ -77,6 +96,11 @@ public sealed partial class StubLlmClient : ILLMClient
 
         if (productIntent == ProductIntent.Monitor)
         {
+            if (!mentionedInLast && ResolveShownProductIds(messages).Count > 0)
+            {
+                return Say(userTexts.Count <= 1 ? StubLocale.Help(lang) : StubLocale.AnythingElse(lang));
+            }
+
             var budget = ParseBudget(userTexts) ?? DefaultMonitorBudget;
             return Call(ToolNames.SearchProducts, new { category = "monitor", tags = new[] { "gaming" }, maxPriceNok = budget, inStockOnly = true });
         }
@@ -85,11 +109,24 @@ public sealed partial class StubLlmClient : ILLMClient
         {
             var budget = ParseBudget(userTexts);
             var isFollowUpAnswer = userTexts.Count == 2 && !mentionedInLast;
-            var enoughInfo = UsageRegex().IsMatch(string.Join(' ', userTexts)) || isFollowUpAnswer;
+            // Budget + laptop in one message (e.g. suggestion chip) → search immediately, like monitors.
+            var budgetInSameMessage = mentionedInLast && budget is not null;
+            var enoughInfo = UsageRegex().IsMatch(string.Join(' ', userTexts))
+                || isFollowUpAnswer
+                || budgetInSameMessage;
 
             if (!enoughInfo)
             {
                 return Say(StubLocale.AskLaptopDetails(lang, budget));
+            }
+
+            if (isFollowUpAnswer)
+            {
+                var shown = ResolveShownProductIds(messages);
+                if (shown.Count >= 2)
+                {
+                    return Call(ToolNames.CompareProducts, new { ids = shown.Take(3).ToArray() });
+                }
             }
 
             if (mentionedInLast || isFollowUpAnswer)
@@ -183,9 +220,73 @@ public sealed partial class StubLlmClient : ILLMClient
     {
         var budget = ParseBudget(userTexts) ?? DefaultLaptopBudget;
         var products = root.TryGetProperty("products", out var p) && p.ValueKind == JsonValueKind.Array ? p.EnumerateArray().ToList() : [];
-        return products.Count == 0
-            ? Say(StubLocale.NoMatch(lang, budget))
-            : Say(StubLocale.LaptopPicks(lang, budget, products.Select(x => Line(x, "GPU", "RAM")).ToList()));
+        if (products.Count == 0)
+        {
+            return Say(StubLocale.NoMatch(lang, budget));
+        }
+
+        var lastUser = userTexts.LastOrDefault() ?? string.Empty;
+        if (IsUsageRefinement(userTexts))
+        {
+            products = OrderByScreenPreference(products, lastUser);
+            var top = Str(products[0], "name");
+            var usage = SummarizeUsagePhrase(lastUser);
+            return Say(StubLocale.LaptopPicksRefined(
+                lang,
+                budget,
+                usage,
+                top,
+                products.Select(x => Line(x, "Screen", "GPU", "RAM")).ToList()));
+        }
+
+        return Say(StubLocale.LaptopPicks(lang, budget, products.Select(x => Line(x, "GPU", "RAM")).ToList()));
+    }
+
+    private static bool IsUsageRefinement(List<string> userTexts) =>
+        userTexts.Count >= 2
+        && UsageRegex().IsMatch(userTexts[^1])
+        && !LaptopRegex().IsMatch(userTexts[^1]);
+
+    private static string SummarizeUsagePhrase(string lastUser)
+    {
+        var t = lastUser.Trim().TrimEnd('.');
+        return t.Length > 90 ? t[..87] + "…" : t;
+    }
+
+    private static List<JsonElement> OrderByScreenPreference(List<JsonElement> products, string lastUser)
+    {
+        if (!Prefer15InchScreen(lastUser))
+        {
+            return products;
+        }
+
+        return products
+            .OrderByDescending(p => ScreenSizeScore(p, preferredInches: 15))
+            .ToList();
+    }
+
+    private static bool Prefer15InchScreen(string text) =>
+        Regex.IsMatch(text, @"\b15\s*(-?\s*inch|\""|tommer|cali)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    private static bool IsAffirmative(string text)
+    {
+        var t = text.Trim().TrimEnd('.', '!', '?');
+        return t.Length <= 24 && AffirmativeRegex().IsMatch(t);
+    }
+
+    private static int ScreenSizeScore(JsonElement product, int preferredInches)
+    {
+        if (!product.TryGetProperty("specs", out var specs) || specs.ValueKind != JsonValueKind.Object)
+        {
+            return 0;
+        }
+
+        if (!specs.TryGetProperty("Screen", out var screen) || screen.ValueKind != JsonValueKind.String)
+        {
+            return 0;
+        }
+
+        return screen.GetString()?.Contains(preferredInches.ToString(), StringComparison.Ordinal) == true ? 1 : 0;
     }
 
     private static string Line(JsonElement product, params string[] specKeys)
@@ -237,6 +338,17 @@ public sealed partial class StubLlmClient : ILLMClient
         }
 
         return null;
+    }
+
+    private static IReadOnlyList<string> ResolveShownProductIds(IReadOnlyList<ChatMessage> messages)
+    {
+        var context = messages.LastOrDefault(m => m.Role == "system" && m.Content.StartsWith("Products currently shown", StringComparison.Ordinal));
+        if (context is null)
+        {
+            return [];
+        }
+
+        return ShownProductRegex().Matches(context.Content).Select(m => m.Groups["id"].Value).ToList();
     }
 
     /// <summary>The product the user means: an id they typed, else the first product currently shown (context message).</summary>
@@ -294,6 +406,9 @@ public sealed partial class StubLlmClient : ILLMClient
 
     [GeneratedRegex(@"ansatt|medarbeider|snakke med (en|et)|menneske|human|staff|employee|real person|pracowni|człowiek|obsług|konsultant", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex HandoffRegex();
+
+    [GeneratedRegex(@"\b(yes|ja|jepp|yep|yeah|sure|please|ok|okay|tak|proszę)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex AffirmativeRegex();
 
     [GeneratedRegex(@"simuler|simulate|guide|led meg|veiled|symuluj|prowad|zaprowad|robot", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex GuideRegex();

@@ -9,6 +9,26 @@ internal static class StubLocale
     public static string Money(decimal value) =>
         value.ToString("N0", CultureInfo.InvariantCulture).Replace(',', '\u00A0') + "\u00A0NOK";
 
+    /// <summary>True when the assistant just asked the standard gaming-laptop follow-up (any supported language).</summary>
+    public static bool IsLaptopDetailsPrompt(string? assistantText) =>
+        assistantText is not null && (
+            assistantText.Contains("gaming laptop around", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("gaming-laptop rundt", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("laptop gamingowy w okolicy", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("Which games do you play", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("Hvilke spill spiller du", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("W jakie gry grasz", StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>True when the assistant offered shelf directions for the products just shown.</summary>
+    public static bool IsProductLocationOffer(string? assistantText) =>
+        assistantText is not null && (
+            assistantText.Contains("Would you like to know where they are", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("where the first one is", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("Vil du vite hvor de står", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("Skal jeg vise hvor den første står", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("Chcesz wiedzieć, gdzie stoją", StringComparison.OrdinalIgnoreCase)
+            || assistantText.Contains("Pokazać, gdzie stoi pierwszy", StringComparison.OrdinalIgnoreCase));
+
     public static string AskLaptopDetails(string lang, decimal? budget) => Pick(lang,
         nb: budget is { } b
             ? $"Kult, en gaming-laptop rundt {Money(b)}! Hvilke spill spiller du, og vil du helst ha den lett eller mest mulig kraftig?"
@@ -24,6 +44,11 @@ internal static class StubLocale
         nb: $"Her er de beste gaming-laptopene innenfor {Money(budget)}:\n{Join(lines)}\nSkal jeg vise hvor den første står, eller la roboten guide deg dit?",
         en: $"Here are the best gaming laptops within {Money(budget)}:\n{Join(lines)}\nShall I show where the first one is, or let the robot guide you there?",
         pl: $"Oto najlepsze laptopy gamingowe do {Money(budget)}:\n{Join(lines)}\nPokazać, gdzie stoi pierwszy, albo zaprowadzić Cię tam robotem?");
+
+    public static string LaptopPicksRefined(string lang, decimal budget, string usage, string topPick, IReadOnlyList<string> lines) => Pick(lang,
+        nb: $"Takk — {usage}. Innenfor {Money(budget)} passer disse best; jeg vil fremheve {topPick} for esportspill og jevn bildefrekvens:\n{Join(lines)}\nVil du vite hvor den første står, eller få en simulert robotguide?",
+        en: $"Thanks — {usage}. Within {Money(budget)}, these still fit best; I'd lean toward the {topPick} for esports and smooth frame rates:\n{Join(lines)}\nWant directions to the first one, or a simulated robot guide?",
+        pl: $"Dzięki — {usage}. W budżecie {Money(budget)} te modele nadal pasują; na esport typu Fortnite/FC poleciłbym {topPick}:\n{Join(lines)}\nPokazać lokalizację pierwszego, czy symulować robot?");
 
     public static string MonitorPicks(string lang, decimal budget, IReadOnlyList<string> lines) => Pick(lang,
         nb: $"Gaming-skjermer innenfor {Money(budget)}:\n{Join(lines)}\nVil du vite hvor de står?",

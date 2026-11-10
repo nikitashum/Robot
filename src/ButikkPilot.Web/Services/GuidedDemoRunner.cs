@@ -46,8 +46,17 @@ public sealed class GuidedDemoRunner : IDisposable
 
     public bool IsActive => State is DemoState.Running or DemoState.Paused;
 
-    /// <summary>Pause between steps so a human can read. Tests set this to zero.</summary>
-    public TimeSpan PaceDelay { get; set; } = TimeSpan.FromMilliseconds(1100);
+    /// <summary>True while the scripted customer is "about to speak" or browse — pause targets this beat, not the assistant.</summary>
+    public bool AwaitingUserTurn { get; private set; }
+
+    /// <summary>Beat before the demo posts the next customer line (typing / speaking). Tests set to zero.</summary>
+    public TimeSpan BeforeUserMessageDelay { get; set; } = TimeSpan.FromSeconds(3.5);
+
+    /// <summary>Brief pause after the assistant answers (scroll/read headline only). Tests set to zero.</summary>
+    public TimeSpan AfterAssistantDelay { get; set; } = TimeSpan.FromSeconds(1.2);
+
+    /// <summary>Step 2: customer scans the recommendation cards before the next question.</summary>
+    public TimeSpan ProductShowcaseDelay { get; set; } = TimeSpan.FromSeconds(4);
 
     public Exception? LastError { get; private set; }
 
@@ -60,6 +69,7 @@ public sealed class GuidedDemoRunner : IDisposable
         CancellationToken run;
         lock (_gate)
         {
+            // Running/Paused: already in a demo. Completed/Failed/Idle: start (or restart) a new run.
             if (IsActive)
             {
                 return State;
@@ -211,7 +221,9 @@ public sealed class GuidedDemoRunner : IDisposable
                 if (host.ProductCount > 0)
                 {
                     host.PulseProducts(true);
-                    await PaceAsync(ct);
+                    SetAwaitingUserTurn(true);
+                    await DelayIfPositiveAsync(ProductShowcaseDelay, ct);
+                    SetAwaitingUserTurn(false);
                     host.PulseProducts(false);
                 }
 
@@ -233,27 +245,46 @@ public sealed class GuidedDemoRunner : IDisposable
 
                 break;
         }
-
-        await PaceAsync(ct);
     }
 
     private async Task SendOrFailAsync(IGuidedDemoHost host, string message, CancellationToken ct)
     {
         await WaitIfPausedAsync(ct);
+
+        SetAwaitingUserTurn(true);
+        await DelayIfPositiveAsync(BeforeUserMessageDelay, ct);
+        await WaitIfPausedAsync(ct);
+        SetAwaitingUserTurn(false);
+
         if (!await host.SendAsync(message, ct))
         {
             throw new InvalidOperationException("The assistant did not answer; stopping the demo.");
         }
+
+        await DelayIfPositiveAsync(AfterAssistantDelay, ct);
     }
 
-    private async Task PaceAsync(CancellationToken ct)
+    private async Task DelayIfPositiveAsync(TimeSpan delay, CancellationToken ct)
     {
-        if (PaceDelay > TimeSpan.Zero)
+        await WaitIfPausedAsync(ct);
+        if (delay <= TimeSpan.Zero)
         {
-            await Task.Delay(PaceDelay, ct);
+            return;
         }
 
-        await WaitIfPausedAsync(ct);
+        var end = DateTime.UtcNow + delay;
+        while (DateTime.UtcNow < end)
+        {
+            await WaitIfPausedAsync(ct);
+            var remaining = end - DateTime.UtcNow;
+            if (remaining <= TimeSpan.Zero)
+            {
+                break;
+            }
+
+            var slice = TimeSpan.FromMilliseconds(200);
+            await Task.Delay(remaining < slice ? remaining : slice, ct);
+        }
     }
 
     private async Task WaitIfPausedAsync(CancellationToken ct)
@@ -273,6 +304,17 @@ public sealed class GuidedDemoRunner : IDisposable
 
             await gate.WaitAsync(ct);
         }
+    }
+
+    private void SetAwaitingUserTurn(bool awaiting)
+    {
+        if (AwaitingUserTurn == awaiting)
+        {
+            return;
+        }
+
+        AwaitingUserTurn = awaiting;
+        Changed?.Invoke();
     }
 
     private void Set(DemoState state, int step)

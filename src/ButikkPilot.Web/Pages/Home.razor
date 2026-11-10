@@ -74,11 +74,11 @@
             </section>
 
             <aside class="side-panel @(_pulse ? "pulse-products" : "")">
-                @if (_response?.RecommendedProducts.Count > 0)
+                @if (_displayProducts.Count > 0)
                 {
                     <h2>@Ui.Recommendations</h2>
                     <div class="product-list">
-                        @foreach (var product in _response.RecommendedProducts)
+                        @foreach (var product in _displayProducts)
                         {
                             <ProductCard Product="product" Ui="Ui" Selected="@(_selectedId == product.Id)"
                                          OnSelected="SelectProductAsync" @key="product.Id" />
@@ -137,6 +137,8 @@
     private ElementReference _chatLog;
     private string _language = SupportedLanguages.Default;
     private Guid? _sessionId;
+    /// <summary>Chains API turns during a guided run. Null on the first scripted message (always a new server session).</summary>
+    private Guid? _guidedSessionId;
     private string _input = "";
     private bool _busy;
     private bool _listening;
@@ -148,6 +150,7 @@
     private bool _pulse;
     private bool _scrollPending;
     private ChatResponse? _response;
+    private readonly List<ProductCardDto> _displayProducts = [];
     private string _responseLanguage = SupportedLanguages.Default;
     private StoreMapDto? _map;
     private string? _selectedId;
@@ -159,7 +162,8 @@
     // (The map highlight and route are language independent and stay.)
     private bool TextPanelsCurrent => _responseLanguage == _language;
 
-    private bool Locked => _busy || Runner.IsActive;
+  // While the demo runs, only Pause opens the input — it should feel like the customer's turn, not a frozen assistant.
+    private bool Locked => _busy || (Runner.IsActive && Runner.State != DemoState.Paused);
 
     protected override async Task OnInitializedAsync()
     {
@@ -263,13 +267,14 @@
     {
         public UiText Text => page.Ui;
 
-        public int ProductCount => page._response?.RecommendedProducts.Count ?? 0;
+        public int ProductCount => page._displayProducts.Count;
 
-        public Task ResetAsync()
+        public async Task ResetAsync()
         {
+            page._busy = false;
             page.ResetConversation();
             page._showMap = true;
-            return Task.CompletedTask;
+            await page.InvokeAsync(page.StateHasChanged);
         }
 
         public Task<bool> SendAsync(string message, CancellationToken ct) => page.SendCoreAsync(message, ct);
@@ -335,10 +340,10 @@
 
         try
         {
-            var response = await Api.SendChatAsync(new ChatRequest { SessionId = _sessionId, Message = text, Language = _language }, ct);
-            _response = response;
-            _responseLanguage = response.Language;
-            _sessionId = response.SessionId;
+            // Guided demo must not reuse a stale _sessionId from the previous run on message 1 (that broke laptop search on replay).
+            var sessionForApi = Runner.IsActive ? _guidedSessionId : _sessionId;
+            var response = await Api.SendChatAsync(new ChatRequest { SessionId = sessionForApi, Message = text, Language = _language }, ct);
+            ApplyChatResponse(response);
             _lines.Add(new ChatLine("assistant", response.AssistantMessage));
 
             if (_voiceOn)
@@ -375,10 +380,30 @@
     private void ResetConversation()
     {
         _sessionId = null;
+        _guidedSessionId = null;
         _response = null;
+        _responseLanguage = _language;
+        _displayProducts.Clear();
         _selectedId = null;
         _lines.Clear();
         _lines.Add(new ChatLine("assistant", Ui.GreetingChat));
+    }
+
+    private void ApplyChatResponse(ChatResponse response)
+    {
+        _response = response;
+        _responseLanguage = response.Language;
+        _sessionId = response.SessionId;
+        if (Runner.IsActive)
+        {
+            _guidedSessionId = response.SessionId;
+        }
+
+        if (response.RecommendedProducts.Count > 0)
+        {
+            _displayProducts.Clear();
+            _displayProducts.AddRange(response.RecommendedProducts);
+        }
     }
 
     private void AddGreeting() => _lines.Add(new ChatLine("assistant", Ui.GreetingChat));

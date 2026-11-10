@@ -78,6 +78,8 @@ public sealed class UiText
     public required string Replay { get; init; }
     public required string DemoDone { get; init; }
     public required string DemoFailed { get; init; }
+    public required string DemoYourTurn { get; init; }
+    public required string DemoPaused { get; init; }
 
     // Errors
     public required string ErrorGeneric { get; init; }
@@ -131,8 +133,8 @@ public sealed class UiText
     public static readonly UiText Norwegian = new()
     {
         Code = "nb-NO",
-        Tagline = "Tenk deg: dette på et nettbrett på hjul, inne i butikken din.",
-        StatusStrip = "ButikkPilot · Interaktiv demo",
+        Tagline = "AI-salgsassistent for elektronikk — kundeopplevelse i butikk.",
+        StatusStrip = "ButikkPilot · Demonstrasjon",
         HelpLabel = "Vis introduksjonen igjen",
         LanguageLabel = "Språk",
         ShowMap = "Vis kart",
@@ -141,10 +143,10 @@ public sealed class UiText
         PriceSuffix = "kr",
 
         WelcomeTitle = "Velkommen til ButikkPilot",
-        WelcomeLead = "Tenk deg en AI-assistent på et nettbrett på hjul, rett inne i elektronikkbutikken. Prøv selv, eller se en guidet demo på ca. 90 sekunder.",
+        WelcomeLead = "Dette er kundegrensesnittet til en AI-assistent i butikk: anbefalinger fra katalogen, plassering og simulert veiledning. Prøv selv, eller følg den guidede gjennomgangen (ca. 90 sekunder).",
         Bullet1 = "Spør om en gaming-laptop eller skjerm, med eget budsjett",
-        Bullet2 = "Få anbefalinger som holder seg innenfor budsjettet, og se hvor varen står",
-        Bullet3 = "Se hvordan roboten ville guidet deg dit (simulert)",
+        Bullet2 = "Få anbefalinger innenfor budsjettet, og se hvor varen står",
+        Bullet3 = "Se simulert veiledning til hyllen (klargjort for robott-integrasjon)",
         DemoDisclaimer = "Demonstrasjonskatalog, ikke ekte butikkdata. Ingen roboter eller medarbeidere blir varslet.",
         StartGuided = "Start guidet demo (90 sek)",
         ExploreSelf = "Utforsk selv",
@@ -193,6 +195,8 @@ public sealed class UiText
         Replay = "Spill av på nytt",
         DemoDone = "Demoen er ferdig. Prøv selv, eller spill den av på nytt.",
         DemoFailed = "Demoen stoppet på grunn av en feil.",
+        DemoYourTurn = "Kundens tur — neste melding kommer straks …",
+        DemoPaused = "Pause. Prøv chatten selv, eller trykk Fortsett.",
 
         ErrorGeneric = "Beklager, noe gikk galt. Prøv igjen.",
         ErrorRateLimited = "For mange meldinger på kort tid. Vent litt og prøv igjen.",
@@ -206,8 +210,8 @@ public sealed class UiText
     public static readonly UiText English = new()
     {
         Code = "en-US",
-        Tagline = "Imagine this on a tablet on wheels, inside your store.",
-        StatusStrip = "ButikkPilot · Interactive demo",
+        Tagline = "In-store AI sales assistant for electronics retail.",
+        StatusStrip = "ButikkPilot · Demonstration",
         HelpLabel = "Show the introduction again",
         LanguageLabel = "Language",
         ShowMap = "Show map",
@@ -216,10 +220,10 @@ public sealed class UiText
         PriceSuffix = "NOK",
 
         WelcomeTitle = "Welcome to ButikkPilot",
-        WelcomeLead = "Imagine an AI assistant on a tablet on wheels, right inside your electronics store. Try it yourself, or watch a guided demo of about 90 seconds.",
+        WelcomeLead = "This is the customer-facing interface for an in-store AI assistant: catalog-backed recommendations, product location, and simulated wayfinding. Try it yourself, or follow the guided walkthrough (about 90 seconds).",
         Bullet1 = "Ask for a gaming laptop or monitor with your own budget",
-        Bullet2 = "Get recommendations that stay within budget and see where the product is",
-        Bullet3 = "See how the robot would guide you there (simulated)",
+        Bullet2 = "Get budget-aware recommendations and see where the product is shelved",
+        Bullet3 = "View simulated guidance to the shelf (ready for robot integration)",
         DemoDisclaimer = "Demo catalog, not real store data. No robot or staff member is actually notified.",
         StartGuided = "Start guided demo (90 sec)",
         ExploreSelf = "Explore on my own",
@@ -268,6 +272,8 @@ public sealed class UiText
         Replay = "Replay",
         DemoDone = "The demo is finished. Try it yourself, or replay it.",
         DemoFailed = "The demo stopped because of an error.",
+        DemoYourTurn = "Customer's turn — next message in a moment …",
+        DemoPaused = "Paused. Try the chat yourself, or press Continue.",
 
         ErrorGeneric = "Sorry, something went wrong. Please try again.",
         ErrorRateLimited = "Too many messages in a short time. Please wait a moment and try again.",
@@ -281,8 +287,8 @@ public sealed class UiText
     public static readonly UiText Polish = new()
     {
         Code = "pl-PL",
-        Tagline = "Wyobraź sobie to na tablecie na kółkach, w Twoim sklepie.",
-        StatusStrip = "ButikkPilot · Interaktywne demo",
+        Tagline = "Asystent sprzedaży AI w sklepie z elektroniką.",
+        StatusStrip = "ButikkPilot · Demonstracja",
         HelpLabel = "Pokaż wprowadzenie ponownie",
         LanguageLabel = "Język",
         ShowMap = "Pokaż mapę",
@@ -291,10 +297,10 @@ public sealed class UiText
         PriceSuffix = "NOK",
 
         WelcomeTitle = "Witaj w ButikkPilot",
-        WelcomeLead = "Wyobraź sobie asystenta AI na tablecie na kółkach, w Twoim sklepie z elektroniką. Wypróbuj sam lub obejrzyj demo z przewodnikiem (ok. 90 sekund).",
+        WelcomeLead = "To interfejs dla klienta w sklepie: rekomendacje z katalogu, lokalizacja produktu i symulowane prowadzenie. Wypróbuj sam lub skorzystaj z przewodnika (ok. 90 s).",
         Bullet1 = "Zapytaj o laptop lub monitor gamingowy z własnym budżetem",
-        Bullet2 = "Otrzymaj rekomendacje mieszczące się w budżecie i zobacz, gdzie leży produkt",
-        Bullet3 = "Zobacz, jak robot by Cię tam zaprowadził (symulacja)",
+        Bullet2 = "Otrzymaj rekomendacje w budżecie i zobacz, gdzie leży produkt",
+        Bullet3 = "Zobacz symulowane prowadzenie do półki (gotowe pod integrację z robotem)",
         DemoDisclaimer = "Katalog demonstracyjny, nie prawdziwe dane sklepu. Żaden robot ani pracownik nie jest faktycznie powiadamiany.",
         StartGuided = "Uruchom demo z przewodnikiem (90 s)",
         ExploreSelf = "Sprawdzę sam",
@@ -343,6 +349,8 @@ public sealed class UiText
         Replay = "Odtwórz ponownie",
         DemoDone = "Demo zakończone. Spróbuj sam lub odtwórz je ponownie.",
         DemoFailed = "Demo zatrzymało się z powodu błędu.",
+        DemoYourTurn = "Tura klienta — za chwilę kolejna wiadomość …",
+        DemoPaused = "Pauza. Napisz coś sam lub naciśnij Kontynuuj.",
 
         ErrorGeneric = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie.",
         ErrorRateLimited = "Zbyt wiele wiadomości w krótkim czasie. Poczekaj chwilę i spróbuj ponownie.",
